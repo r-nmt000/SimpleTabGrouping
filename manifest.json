@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+
+  "name": "SimpleTabsGrouping",
+  "description": "SimpleTabsGrouping",
+  "version": "1.0",
+
+  "permissions": [
+    "tabs", "http://*/*",  "https://secure.flickr.com/"
+  ],
+  "background":{
+	"scripts":["background.js"]
+  },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+}
+
