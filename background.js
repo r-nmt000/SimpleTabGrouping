@@ -25,16 +25,28 @@ tabGroup.prototype = {
     add:function(tabId){
 	console.log("add was called");
 	//put data on top of myTabs
-	this.myTabs.push(allTabs[tabId]);
-	//delete tag data from allTabs
-	allTabs.splice(tabId,1);
-	//save data to localStorage
-	localStorage.groupList = JSON.stringify(groupList);
+	if(allTabs[tabId]){
+	    if(allTabs[tabId].URL){
+		this.myTabs.push(allTabs[tabId]);
+		
+		//	var popup = chrome.extension.getViews({"type":"popup"});
+		//	if(!($.isEmptyObject(popup))){
+		//add deleted tab in top group
+		//	    popup.addTab(allTabs[tabId].title);
+		//	}
+		//delete tag data from allTabs
+		allTabs.splice(tabId,1);
+		//save data to localStorage
+		localStorage.groupList = JSON.stringify(groupList);
+	    }
+	}
     },
     release:function(){
 	console.log("release was called");
 	for(var i in this.myTabs){
+	    if(this.myTabs[i]){
 		chrome.tabs.create({url: this.myTabs[i].URL});
+	    }
 	}
     }   
 }
@@ -66,8 +78,9 @@ function assignEventHandlers() {
     //call when a tab is closed.
     //if groupList is empty, nothing will happen.
     chrome.tabs.onRemoved.addListener(function(tabId) {if(groupList.length>0){groupList[0].add(tabId)}});
-/*
+    //if a tab is created in a window, add it to allTabs.
     chrome.tabs.onCreated.addListener(function(tab) {allTabs[tab.id] = new tabData(tab)});
+/*
     chrome.tabs.onUpdated.addListener(function(tab) {
 	if(allTabs[tab.id]){
 	    allTabs.splice(tab.id,1);
