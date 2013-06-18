@@ -132,7 +132,7 @@ $(function(){
 		}
 	    });
 
-	    $('#sitemap > li').droppable({
+	    $('#sitemap > li > dl').droppable({
 		accept: '#sitemap ul > li',
 		tolerance: 'pointer',
 		drop: function(e, ui) {
@@ -252,7 +252,7 @@ $(function(){
         }
     });
 
-    $('#sitemap > li').droppable({
+    $('#sitemap > li > dl').droppable({
         accept: '#sitemap  ul > li, #sitemap > ul',
         tolerance: 'pointer',
         drop: function(e, ui) {
