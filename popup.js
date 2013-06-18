@@ -46,7 +46,7 @@ $(function(){
 	    for(var j in bg.groupList[i].myTabs){
 		if(bg.groupList[i].myTabs[j]){
 		    console.log(bg.groupList[i].myTabs[j].title);
-		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><!--<a href="#"class="sm2_release">&nbsp;</a>--><dt><a class="sm2_title" href="#">'+bg.groupList[i].myTabs[j].title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="retain">&nbsp;</a><dt><a class="sm2_title" href="#">'+bg.groupList[i].myTabs[j].title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
 		    
 		}
 	    }
@@ -73,8 +73,67 @@ $(function(){
 		    sitemapHistory.saveState(this);
 		}
 	    });
-	    $('#sitemap > li, #sitemap .dropzone').droppable({
-		accept: '#sitemap li',
+	    $('#sitemap > li > .dropzone').droppable({
+		accept: '#sitemap > li',
+		tolerance: 'pointer',
+		drop: function(e, ui) {
+		    var li = $(this).parent();
+		    var child = !$(this).hasClass('dropzone');
+		    if (child && li.children('ul').length == 0) {
+			li.append('<ul/>');
+		    }
+		    if (child) {
+			li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
+		    }
+		    else {
+			li.before(ui.draggable);
+		    }
+		    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
+		    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
+		    bg.topGroupName = $(".sm2_title:first").text();
+		    sitemapHistory.commit();
+		},
+		over: function() {
+		    $(this).filter('dl').css({ backgroundColor: '#ccc' });
+		    $(this).filter('.dropzone').css({ borderColor: '#aaa' });
+		},
+		out: function() {
+		    $(this).filter('dl').css({ backgroundColor: '' });
+		    $(this).filter('.dropzone').css({ borderColor: '' });
+		}
+	    });
+	    $('#sitemap ul .dropzone').droppable({
+		accept: '#sitemap ul > li',
+		tolerance: 'pointer',
+		drop: function(e, ui) {
+		    var li = $(this).parent();
+		    var child = !$(this).hasClass('dropzone');
+		    if (child && li.children('ul').length == 0) {
+			li.append('<ul/>');
+		    }
+		    if (child) {
+			li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
+		    }
+		    else {
+			li.before(ui.draggable);
+		    }
+		    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
+		    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
+		    bg.topGroupName = $(".sm2_title:first").text();
+		    sitemapHistory.commit();
+		},
+		over: function() {
+		    $(this).filter('dl').css({ backgroundColor: '#ccc' });
+		    $(this).filter('.dropzone').css({ borderColor: '#aaa' });
+		},
+		out: function() {
+		    $(this).filter('dl').css({ backgroundColor: '' });
+		    $(this).filter('.dropzone').css({ borderColor: '' });
+		}
+	    });
+
+	    $('#sitemap > li').droppable({
+		accept: '#sitemap ul > li',
 		tolerance: 'pointer',
 		drop: function(e, ui) {
 		    var li = $(this).parent();
@@ -106,9 +165,7 @@ $(function(){
 	    bg.makeNewGroup();
 
 	}
-    });
-    $(".delete").click(function(){
-	$(this).parent().remove();
+
     });
 
     $('#groups').sortable( {
@@ -133,8 +190,8 @@ $(function(){
 //    $('#jquery-ui-draggable-connectToSortable').disableSelection();
     $('#sitemap li').prepend('<div class="dropzone"></div>');
 
-    $('#sitemap > li, #sitemap .dropzone').droppable({
-        accept: '#sitemap li',
+    $('#sitemap > li > .dropzone').droppable({
+        accept: '#sitemap > li',
         tolerance: 'pointer',
         drop: function(e, ui) {
             var li = $(this).parent();
@@ -163,6 +220,69 @@ $(function(){
             $(this).filter('.dropzone').css({ borderColor: '' });
         }
     });
+
+    $('#sitemap ul .dropzone').droppable({
+        accept: '#sitemap ul > li',
+        tolerance: 'pointer',
+        drop: function(e, ui) {
+            var li = $(this).parent();
+            var child = !$(this).hasClass('dropzone');
+            if (child && li.children('ul').length == 0) {
+                li.append('<ul/>');
+            }
+            if (child) {
+                li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
+            }
+            else {
+                li.before(ui.draggable);
+            }
+	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
+            li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
+	    bg.topGroupName = $(".sm2_title:first").text();
+	    
+            sitemapHistory.commit();
+        },
+        over: function() {
+            $(this).filter('dl').css({ backgroundColor: '#ccc' });
+            $(this).filter('.dropzone').css({ borderColor: '#aaa' });
+        },
+        out: function() {
+            $(this).filter('dl').css({ backgroundColor: '' });
+            $(this).filter('.dropzone').css({ borderColor: '' });
+        }
+    });
+
+    $('#sitemap > li').droppable({
+        accept: '#sitemap  ul > li, #sitemap > ul',
+        tolerance: 'pointer',
+        drop: function(e, ui) {
+            var li = $(this).parent();
+            var child = !$(this).hasClass('dropzone');
+            if (child && li.children('ul').length == 0) {
+                li.append('<ul/>');
+            }
+            if (child) {
+                li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
+            }
+            else {
+                li.before(ui.draggable);
+            }
+	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
+            li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
+	    bg.topGroupName = $(".sm2_title:first").text();
+	    
+            sitemapHistory.commit();
+        },
+        over: function() {
+            $(this).filter('dl').css({ backgroundColor: '#ccc' });
+            $(this).filter('.dropzone').css({ borderColor: '#aaa' });
+        },
+        out: function() {
+            $(this).filter('dl').css({ backgroundColor: '' });
+            $(this).filter('.dropzone').css({ borderColor: '' });
+        }
+    });
+
 /*
     $('#sitemap').on('mousedown', 'li', function() {
 	$(this).draggable({
@@ -178,7 +298,7 @@ $(function(){
     });
 */
 
-    $('#sitemap > li').draggable({
+    $('#sitemap li').draggable({
         handle: ' > dl',
         opacity: .8,
         addClasses: false,
@@ -198,11 +318,31 @@ $(function(){
 	$(this).parent().parent().toggleClass('sm2_liOpen').toggleClass('sm2_liClosed');
 	return false;
     });
+    //when a delete button is clicked
+    $('#sitemap').on('click', '.sm2_delete',function(){
+	//tab or group
+	var isTab = $(this).parent().parent().parent('.child_tag');
+	//if it is a group
+	if((Object.keys(isTab).length === 3)){
+	    //delete selected group from groupList
+	    var index = $('#sitemap > li').index($(this).parent().parent().parent());
+	    bg.deleteGroup(index);
+	    $(this).parent().parent().parent().remove();
+	//if it is a tab
+	}else{
+	    var groupIndex = $('#sitemap > li').index($(this).parent().parent().parent().parent().parent());
+	    var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent());
+	    bg.groupList[groupIndex].deleteTab(tabIndex);
+	    $(this).parent().parent().parent().remove();
+	}
+    });
+
+
     //when a group name is clicked, release all tabs in the group
     $('#sitemap').on('click', 'dt',function(){
-	var isGroup = $(this).parent().parent('.child_tag');
+	var isTab = $(this).parent().parent('.child_tag');
 	//if it is a group
-	if(isGroup){
+	if((Object.keys(isTab).length === 3)){
 	    //check release or retain group
 	    var isRetain = $(this).prev('.retain');
 	    var index = $('#sitemap > li').index($(this).parent().parent());
@@ -236,37 +376,43 @@ $(function(){
 			    //close a tab
 			    console.log(bg.allTabs[j].URL);
 			    chrome.tabs.remove(bg.allTabs[j].id);
+			    break;
 			}
 		    }
 		}
 	    }
-/*
-	}else if(it is a tab){
+	//if it is a tab
+	}else{
 	    //check release or retain tab
-	    if(/*retain){
-		for(){
+	    var isRetain = $(this).prev('.retain');
+	    var groupIndex = $('#sitemap > li').index($(this).parent().parent().parent().parent());
+	    var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent());
+	    var selectedTab = bg.groupList[groupIndex].myTabs[tabIndex];
+	    //retain
+	    if(!(Object.keys(isRetain).length === 3)){
+		var foundSameTab = false;
+		for(var i in bg.allTabs){
 		    //check all tabs in a window and compare them with clicked tab		    
-		    if(/*correspond with a tab in the window){
+		    if(selectedTab.URL === bg.allTabs[i].URL){
 			//find flag up
-			berak;
+			foundSameTab = true;
+			break;
 		    }
 		}
-		if(!found){
+		if(!foundSameTab){
 		    //release tab
+		    chrome.tabs.create({url: selectedTab.URL});
 		}
 	    //release
 	    }else{
-		for(){
-		    //check all tabs in a window and compare them with clicked tab		    
-		    if(/*correspond with a tab in the window){
-			//groupList.add(tabId);
-			//delete a tab
-			berak;
+		//check all tabs in a window and compare them with clicked tab		    
+		for(var i in bg.allTabs){
+		    if(selectedTab.URL === bg.allTabs[i].URL){
+			chrome.tabs.remove(bg.allTabs[i].id);
+			break;
 		    }
 		}
 	    }
-	}
-*/
 	}
 	//switch release and retain
 	$(this).prev().toggleClass('retain').toggleClass('release');
