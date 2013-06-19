@@ -33,30 +33,7 @@ var sitemapHistory = {
 function addTab(title) {
     $("#sitemap > li:first ul").append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><!--<a href="#"class="sm2_release">&nbsp;</a>--><dt><a class="sm2_title" href="#">'+title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
 }
-
-$(function(){
-
-    //load groups from localStorage
-    for(var i in bg.groupList ){
-	console.log(bg.groupList[0].groupname);
-	var groupname = bg.groupList[i].groupname;
-	$('#sitemap').append('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="retain">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
-	if(bg.groupList[i].length != 0){
-	    $('#sitemap > li:last').append('<ul></ul>');
-	    for(var j in bg.groupList[i].myTabs){
-		if(bg.groupList[i].myTabs[j]){
-		    console.log(bg.groupList[i].myTabs[j].title);
-		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="retain">&nbsp;</a><dt><a class="sm2_title" href="#">'+bg.groupList[i].myTabs[j].title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
-		    
-		}
-	    }
-
-	}
-    }
-    //load all tabs in a window to background's allTabs.
-    bg.getAllTabs();
-    
-    $("#new:input").click(function(){	
+function addGroup(){
 	var groupname = $("#groupname").val();
 	if(groupname){
 	    //add new group at top
@@ -163,11 +140,33 @@ $(function(){
 	    });
 	    bg.topGroupName = groupname;
 	    bg.makeNewGroup();
+	}
+} 
+
+$(function(){
+
+    //load groups from localStorage
+    for(var i in bg.groupList ){
+	console.log(bg.groupList[0].groupname);
+	var groupname = bg.groupList[i].groupname;
+	$('#sitemap').append('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="retain">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+	if(bg.groupList[i].length != 0){
+	    $('#sitemap > li:last').append('<ul></ul>');
+	    for(var j in bg.groupList[i].myTabs){
+		if(bg.groupList[i].myTabs[j]){
+		    console.log(bg.groupList[i].myTabs[j].title);
+		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="retain">&nbsp;</a><dt><a class="sm2_title" href="#">'+bg.groupList[i].myTabs[j].title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+		    
+		}
+	    }
 
 	}
-
-    });
-
+    }
+    //load all tabs in a window to background's allTabs.
+    bg.getAllTabs();
+    
+    $("#new:input").click(function(){addGroup()});
+    $('#groupname').keypress(function(event){if(event.which === 13){addGroup()}});
     $('#groups').sortable( {
         revert: true,
 	scroll: false,
