@@ -178,15 +178,6 @@ $(function(){
 	    console.log($("li:first").contents().not($("button")).text());
 	},
     } );
-
-//    $("#groups-tree").jstree();
-//    $("#jquery-ui-sortable").on("sortupdate", function( event, ui ) {} );
-/*
-    $('.ui-state-default').( {
-        axis: 'y',
-    } );
-*/
-//    $('#jquery-ui-draggable-connectToSortable').disableSelection();
     $('#sitemap li').prepend('<div class="dropzone"></div>');
 
     $('#sitemap > li > .dropzone').droppable({
@@ -282,20 +273,6 @@ $(function(){
         }
     });
 
-/*
-    $('#sitemap').on('mousedown', 'li', function() {
-	$(this).draggable({
-	    handle: ' > dl',
-            opacity: .8,
-            addClasses: false,
-            helper: 'clone',
-            zIndex: 100,
-            start: function(e, ui) {
-		sitemapHistory.saveState(this);
-            }
-	});
-    });
-*/
 
     $('#sitemap li').draggable({
         handle: ' > dl',
@@ -379,6 +356,9 @@ $(function(){
 			}
 		    }
 		}
+		//chrome.tabs.onRemoved.addListener() doesn't work well
+		//so refresh allTabs manually
+		bg.getAllTabs();
 	    }
 	//if it is a tab
 	}else{
@@ -417,13 +397,6 @@ $(function(){
 	$(this).prev().toggleClass('retain').toggleClass('release');
     });
 
-
-/*
-    $('.sm2_expander').click(function() {
-	$(this).parent().parent().toggleClass('sm2_liOpen').toggleClass('sm2_liClosed');
-	return false;
-    });
-*/
 });
 
 

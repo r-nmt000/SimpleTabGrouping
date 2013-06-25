@@ -12,7 +12,6 @@ function tabData(a) {
     this.popped = !1;
     this.isIncognitoTab = a.incognito;
     this.parent = this.id
-//    this.group = null;
 }
 
 
@@ -22,23 +21,18 @@ function tabGroup(name, tabs) {
 
 }
 tabGroup.prototype = {
+    //add a tab to tabGroup
     add:function(tabId){
 	console.log("add was called");
 	//put data on top of myTabs
 	if(allTabs[tabId]){
 	    if(allTabs[tabId].URL){
 		this.myTabs.push(allTabs[tabId]);
-		
-		//	var popup = chrome.extension.getViews({"type":"popup"});
-		//	if(!($.isEmptyObject(popup))){
-		//add deleted tab in top group
-		//	    popup.addTab(allTabs[tabId].title);
-		//	}
-		//save data to localStorage
 		localStorage.groupList = JSON.stringify(groupList);
 	    }
 	}
     },
+    //release tabs in tabGroup
     release:function(){
 	console.log("release was called");
 	for(var i in this.myTabs){
@@ -47,6 +41,7 @@ tabGroup.prototype = {
 	    }
 	}
     },
+    //delete a tab in tabGroup
     deleteTab:function(index){
 	console.log("deleteTab was called");
 	this.myTabs.splice(index, 1);
@@ -71,35 +66,56 @@ function init() {
 
 }
 
+//called when shortcut key is pressed
+function closeTab(tab){
+    if(groupList.length>0){
+	groupList[0].add(tab.id);
+    }
+    allTabs.splice(tab.id,1);
+    chrome.tabs.remove(tab.id);
+}
+
+//get all tabs in the current window
 function getAllTabs(){
     chrome.tabs.getAllInWindow(null, function(currentTabs){
+	allTabs = [];
 	currentTabs.forEach(function(tab){
+	    //refresh allTabs array
+
             allTabs[tab.id] = new tabData(tab);
 	});
     });
 }
+
+
+//assign eventhandlers
 function assignEventHandlers() {
     //call when a tab is closed.
     //if groupList is empty, nothing will happen.
+    //if a tab is created in a window, add it to allTabs.
+/*
+    chrome.tabs.onCreated.addListener(function(tab) {
+	allTabs[tab.id] = new tabData(tab);
+    });
+*/
+    chrome.tabs.onUpdated.addListener(function(a,b,tab) {
+	allTabs[tab.id] = new tabData(tab);
+    });
     chrome.tabs.onRemoved.addListener(function(tabId) {
-	if(groupList.length>0){
-	    groupList[0].add(tabId);
-	}
 	allTabs.splice(tabId,1);
     });
-    //if a tab is created in a window, add it to allTabs.
-    chrome.tabs.onCreated.addListener(function(tab) {getAllTabs()});
-/*
-    chrome.tabs.onUpdated.addListener(function(tab) {
-	if(allTabs[tab.id]){
-	    allTabs.splice(tab.id,1);
+    chrome.commands.onCommand.addListener(function(command) {
+	if (command == "shortcut") {
+	    // Get the currently selected tab
+	    chrome.tabs.getSelected(null, function(tab) {
+		
+		closeTab(tab);
+	    });
 	}
-	allTabs[tab.id] = new tabData(tab)
     });
-    chrome.tabs.onAttached.addListener(function(tabId) {if(groupList){groupList[0].add(tabId)}});
-    chrome.tabs.onDetached.addListener(function(tabId) {allTabs.splice(tabId, 1)});
-*/
 }
+
+
 //handle groupList
 function makeNewGroup(){
     //make room at head for new group
@@ -116,6 +132,9 @@ function deleteGroup(index){
 function rearrangeGroups(){
     localStorage.groupList = JSON.stringify(groupList);
 }
+
+
+
 init();
 chrome.browserAction.setBadgeText({"text":"100"})
 
