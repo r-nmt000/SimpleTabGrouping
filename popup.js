@@ -37,7 +37,7 @@ function addGroup(){
 	var groupname = $("#groupname").val();
 	if(groupname){
 	    //add new group at top
-	    $("#sitemap").prepend('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="retain">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+	    $("#sitemap").prepend('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
 	    $("#groupname").val("");
 	    //reset draggable and droppable
 	    $('#sitemap > li').draggable({
@@ -145,25 +145,38 @@ function addGroup(){
 
 $(function(){
 
+    //put checkbox
+    if(bg.toNewWindow){
+	$('#new').after('<br><input type="checkbox" id="destination" checked="checked" value="value">open selected group in new window');
+    }else{
+	$('#new').after('<br><input type="checkbox" id="destination" value="value">open selected group in new window');
+    }
     //load groups from localStorage
     for(var i in bg.groupList ){
 	console.log(bg.groupList[0].groupname);
 	var groupname = bg.groupList[i].groupname;
-	$('#sitemap').append('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="retain">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+	if(bg.groupList[i].stored){
+	    $('#sitemap').append('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+	}else{
+	    $('#sitemap').append('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="released">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+	}
 	if(bg.groupList[i].length != 0){
 	    $('#sitemap > li:last').append('<ul></ul>');
 	    for(var j in bg.groupList[i].myTabs){
 		if(bg.groupList[i].myTabs[j]){
 		    console.log(bg.groupList[i].myTabs[j].title);
-		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="retain">&nbsp;</a><dt><a class="sm2_title" href="#">'+bg.groupList[i].myTabs[j].title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
-		    
+		    if(bg.groupList[i].myTabs[j].stored){
+		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">'+bg.groupList[i].myTabs[j].title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+		    }else{
+		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="released">&nbsp;</a><dt><a class="sm2_title" href="#">'+bg.groupList[i].myTabs[j].title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');		    
+		    }
 		}
 	    }
 
 	}
     }
     //load all tabs in a window to background's allTabs.
-    bg.getAllTabs();
+    bg.updateAllTabs();
     
     $("#new:input").click(function(){addGroup()});
     $('#groupname').keypress(function(event){if(event.which === 13){addGroup()}});
@@ -173,9 +186,7 @@ $(function(){
 	axis: 'y',
 	update: function( event, ui ) {
 	    var temp = "";
-	    console.log("update was called");
 	    bg.topGroupName = $("li:first").contents().not($("button")).text();
-	    console.log($("li:first").contents().not($("button")).text());
 	},
     } );
     $('#sitemap li').prepend('<div class="dropzone"></div>');
@@ -312,63 +323,56 @@ $(function(){
 	    $(this).parent().parent().parent().remove();
 	}
     });
-
+    $('p').on('click', '#destination',function(){
+	if($('#destination').is(":checked")){
+	    bg.toNewWindow = true;
+	}else{
+	    bg.toNewWindow = false;
+	}
+    });
 
     //when a group name is clicked, release all tabs in the group
     $('#sitemap').on('click', 'dt',function(){
 	var isTab = $(this).parent().parent('.child_tag');
 	//if it is a group
 	if((Object.keys(isTab).length === 3)){
-	    //check release or retain group
-	    var isRetain = $(this).prev('.retain');
+	    //check released or stored group
+	    var isStored = $(this).prev('.stored');
 	    var index = $('#sitemap > li').index($(this).parent().parent());
 	    var selectedGroup = bg.groupList[index];
-
-	    if(!(Object.keys(isRetain).length === 3)){
-		for(var i in selectedGroup.myTabs){
-		    var foundSameOne = false;
-		    //check if tabs in the group are already open or not
-		    for(var j in bg.allTabs){
-			console.log(j);
-			console.log(selectedGroup.myTabs[i].URL);
-			console.log(bg.allTabs[j].URL);
-			if(selectedGroup.myTabs[i].URL == bg.allTabs[j].URL){
-			    console.log("foundSameOne");
-			    foundSameOne = true;
-			    break;
-			}
-		    }
-		    if(!foundSameOne){
-			//open a tab
-			chrome.tabs.create({url: selectedGroup.myTabs[i].URL});
-		    }
+	    //a group is stored
+	    if(!(Object.keys(isStored).length === 3)){	       	       
+		//select where tabs release       		
+		if($('#destination').is(":checked")){
+		    bg.toNewWindow = true;
 		}
-	    //release
+		//release a group
+		selectedGroup.release();	       
+		//toggle children's released and stored
+		$(this).parent().next().children().find('.stored').toggleClass('stored').toggleClass('released');
+	    //a group is released
 	    }else{
 		//close tabs in the group
-		for(var i in selectedGroup.myTabs){
-		    for(var j in bg.allTabs){
-			if(selectedGroup.myTabs[i].URL == bg.allTabs[j].URL){
-			    //close a tab
-			    console.log(bg.allTabs[j].URL);
-			    chrome.tabs.remove(bg.allTabs[j].id);
-			    break;
-			}
-		    }
-		}
+		selectedGroup.store();
 		//chrome.tabs.onRemoved.addListener() doesn't work well
 		//so refresh allTabs manually
-		bg.getAllTabs();
+		bg.updateAllTabs();
+		//toggle children's released and stored
+		$(this).parent().next().children().find('.released').toggleClass('stored').toggleClass('released');
 	    }
+	    //switch released and stored
+	    $(this).prev().toggleClass('stored').toggleClass('released');
 	//if it is a tab
 	}else{
-	    //check release or retain tab
-	    var isRetain = $(this).prev('.retain');
+	    //check released or stored tab
+	    var isStored = $(this).prev('.stored');
 	    var groupIndex = $('#sitemap > li').index($(this).parent().parent().parent().parent());
 	    var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent());
 	    var selectedTab = bg.groupList[groupIndex].myTabs[tabIndex];
-	    //retain
-	    if(!(Object.keys(isRetain).length === 3)){
+	    //stored
+	    if(!(Object.keys(isStored).length === 3)){
+		selectedTab.release(groupIndex);
+/*
 		var foundSameTab = false;
 		for(var i in bg.allTabs){
 		    //check all tabs in a window and compare them with clicked tab		    
@@ -382,19 +386,22 @@ $(function(){
 		    //release tab
 		    chrome.tabs.create({url: selectedTab.URL});
 		}
-	    //release
+*/
+	    //released
 	    }else{
-		//check all tabs in a window and compare them with clicked tab		    
+		selectedTab.store(groupIndex);
+/*
+		//check all tabs in a window and compare them with clicked tab
 		for(var i in bg.allTabs){
 		    if(selectedTab.URL === bg.allTabs[i].URL){
 			chrome.tabs.remove(bg.allTabs[i].id);
 			break;
 		    }
 		}
+*/
 	    }
-	}
-	//switch release and retain
-	$(this).prev().toggleClass('retain').toggleClass('release');
+	    //toggle released and stored
+	    $(this).prev().toggleClass('stored').toggleClass('released');	}
     });
 
 });

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "SimpleTabsGrouping",
-  "description": "SimpleTabsGrouping",
+  "name": "SimpleTabGrouping",
+  "description": "SimpleTabGrouping",
   "version": "1.0",
 
   "permissions": [
@@ -14,7 +14,7 @@
   "commands": {
     "shortcut": {
       "suggested_key": { "default": "Alt+W" },
-      "description": "close and save a tab"
+      "description": "close and store a tab"
     }
   },
   "browser_action": {
