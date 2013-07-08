@@ -31,6 +31,127 @@ var sitemapHistory = {
     }
 }
 
+function addDragDrop(){
+    //reset draggable and droppable
+    $('#sitemap li').draggable({
+	handle: ' > dl',
+	opacity: .8,
+	addClasses: false,
+	helper: 'clone',
+	zIndex: 100,
+	start: function(e, ui) {
+	    sitemapHistory.saveState(this);
+	    if($(this).hasClass('child_tag')){
+		parentIndex = $('#sitemap > li').index($(this).parent().parent());
+		draggedIndex = $('#sitemap > li').eq(parentIndex).find('li').index($(this));
+	    }else{
+		parentIndex = -1;
+		draggedIndex = $('#sitemap > li').index($(this));
+	    }
+	}
+    });
+    $('#sitemap > li > .dropzone').droppable({
+	accept: '#sitemap > li',
+	tolerance: 'pointer',
+	drop: function(e, ui) {
+	    var li = $(this).parent();
+	    var child = !$(this).hasClass('dropzone');
+	    droppedIndex = $('#sitemap > li').index($(this).parent());
+	    if (child && li.children('ul').length == 0) {
+		li.append('<ul/>');
+	    }
+	    if (child) {
+		li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
+	    }
+	    else {
+		li.before(ui.draggable);
+	    }
+	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
+	    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
+	    bg.topGroupName = $(".sm2_title:first").text();
+	    //save arrangement
+	    bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,GROUP_GROUP);
+	    sitemapHistory.commit();
+	},
+	over: function() {
+	    $(this).filter('dl').css({ backgroundColor: '#ccc' });
+	    $(this).filter('.dropzone').css({ borderColor: '#aaa' });
+	},
+	out: function() {
+	    $(this).filter('dl').css({ backgroundColor: '' });
+	    $(this).filter('.dropzone').css({ borderColor: '' });
+	}
+    });
+    $('#sitemap ul .dropzone').droppable({
+	accept: '#sitemap ul > li',
+	tolerance: 'pointer',
+	drop: function(e, ui) {
+	    var li = $(this).parent();
+	    var child = !$(this).hasClass('dropzone');
+	    var droppedParent = $('#sitemap > li').index($(li).parent().parent());
+	    droppedIndex = $('#sitemap > li').eq(droppedParent).find('li').index($(this).parent());
+	    if (child && li.children('ul').length == 0) {
+		li.append('<ul/>');
+	    }
+	    if (child) {
+		li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
+	    }
+	    else {
+		li.before(ui.draggable);
+	    }
+	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
+	    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
+	    bg.topGroupName = $(".sm2_title:first").text();
+	    //save arrangement
+	    if(droppedParent === parentIndex){
+		bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,TAB_TAB);
+	    }else{
+		bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,droppedParent,TAB_TAB_DIFFGROUP);
+	    }
+	    sitemapHistory.commit();
+	},
+	over: function() {
+	    $(this).filter('dl').css({ backgroundColor: '#ccc' });
+	    $(this).filter('.dropzone').css({ borderColor: '#aaa' });
+	},
+	out: function() {
+	    $(this).filter('dl').css({ backgroundColor: '' });
+	    $(this).filter('.dropzone').css({ borderColor: '' });
+	}
+    });
+    $('#sitemap > li > dl').droppable({
+	accept: '#sitemap ul > li',
+	tolerance: 'pointer',
+	drop: function(e, ui) {
+	    var li = $(this).parent();
+	    var child = !$(this).hasClass('dropzone');
+	    droppedIndex = $('#sitemap > li').index($(this).parent());
+	    if (child && li.children('ul').length == 0) {
+		li.append('<ul/>');
+	    }
+	    if (child) {
+		li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
+	    }
+	    else {
+		li.before(ui.draggable);
+	    }
+	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
+	    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
+	    bg.topGroupName = $(".sm2_title:first").text();
+	    //save arrangement
+	    bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,TAB_GROUP);
+	    sitemapHistory.commit();
+	},
+	over: function() {
+	    $(this).filter('dl').css({ backgroundColor: '#ccc' });
+	    $(this).filter('.dropzone').css({ borderColor: '#aaa' });
+	},
+	out: function() {
+	    $(this).filter('dl').css({ backgroundColor: '' });
+	    $(this).filter('.dropzone').css({ borderColor: '' });
+	}
+    });
+}
 function addTab(title) {
     $("#sitemap > li:first ul").append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><!--<a href="#"class="sm2_release">&nbsp;</a>--><dt><a class="sm2_title" href="#">'+title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
 }
@@ -40,125 +161,7 @@ function addGroup(){
 	    //add new group at top
 	    $("#sitemap").prepend('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
 	    $("#groupname").val("");
-	    //reset draggable and droppable
-	    $('#sitemap > li').draggable({
-		handle: ' > dl',
-		opacity: .8,
-		addClasses: false,
-		helper: 'clone',
-		zIndex: 100,
-		start: function(e, ui) {
-		    sitemapHistory.saveState(this);
-		    if($(this).hasClass('child_tag')){
-			parentIndex = $('#sitemap > li').index($(this).parent().parent());
-			draggedIndex = $('#sitemap > li').eq(parentIndex).find('li').index($(this));
-		    }else{
-			parentIndex = -1;
-			draggedIndex = $('#sitemap > li').index($(this));
-		    }
-		}
-	    });
-	    $('#sitemap > li > .dropzone').droppable({
-		accept: '#sitemap > li',
-		tolerance: 'pointer',
-		drop: function(e, ui) {
-		    var li = $(this).parent();
-		    var child = !$(this).hasClass('dropzone');
-		    droppedIndex = $('#sitemap > li').index($(this).parent());
-		    if (child && li.children('ul').length == 0) {
-			li.append('<ul/>');
-		    }
-		    if (child) {
-			li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
-		    }
-		    else {
-			li.before(ui.draggable);
-		    }
-		    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
-		    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
-		    bg.topGroupName = $(".sm2_title:first").text();
-		    //save arrangement
-		    bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,GROUP_GROUP);
-		    sitemapHistory.commit();
-		},
-		over: function() {
-		    $(this).filter('dl').css({ backgroundColor: '#ccc' });
-		    $(this).filter('.dropzone').css({ borderColor: '#aaa' });
-		},
-		out: function() {
-		    $(this).filter('dl').css({ backgroundColor: '' });
-		    $(this).filter('.dropzone').css({ borderColor: '' });
-		}
-	    });
-	    $('#sitemap ul .dropzone').droppable({
-		accept: '#sitemap ul > li',
-		tolerance: 'pointer',
-		drop: function(e, ui) {
-		    var li = $(this).parent();
-		    var child = !$(this).hasClass('dropzone');
-		    var droppedParent = $('#sitemap > li').index($(li).parent().parent());
-		    droppedIndex = $('#sitemap > li').eq(droppedParent).find('li').index($(this).parent());
-		    if (child && li.children('ul').length == 0) {
-			li.append('<ul/>');
-		    }
-		    if (child) {
-			li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
-		    }
-		    else {
-			li.before(ui.draggable);
-		    }
-		    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
-		    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
-		    bg.topGroupName = $(".sm2_title:first").text();
-		    //save arrangement
-		    if(droppedParent === parentIndex){
-			bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,TA_TAB);
-		    }else{
-			bg.rearrangeGroups(draggedIndex,droppedIndex,droppedParent,TAB_TAB_DIFFGROUP);
-		    }
-		    sitemapHistory.commit();
-		},
-		over: function() {
-		    $(this).filter('dl').css({ backgroundColor: '#ccc' });
-		    $(this).filter('.dropzone').css({ borderColor: '#aaa' });
-		},
-		out: function() {
-		    $(this).filter('dl').css({ backgroundColor: '' });
-		    $(this).filter('.dropzone').css({ borderColor: '' });
-		}
-	    });
-	    $('#sitemap > li > dl').droppable({
-		accept: '#sitemap ul > li',
-		tolerance: 'pointer',
-		drop: function(e, ui) {
-		    var li = $(this).parent();
-		    var child = !$(this).hasClass('dropzone');
-		    droppedIndex = $('#sitemap > li').index($(this).parent());
-		    if (child && li.children('ul').length == 0) {
-			li.append('<ul/>');
-		    }
-		    if (child) {
-			li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
-		    }
-		    else {
-			li.before(ui.draggable);
-		    }
-		    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
-		    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
-		    bg.topGroupName = $(".sm2_title:first").text();
-		    //save arrangement
-		    bg.rearrangeGroups(draggedIndex,droppedIndex,-1,TAB_GROUP);
-		    sitemapHistory.commit();
-		},
-		over: function() {
-		    $(this).filter('dl').css({ backgroundColor: '#ccc' });
-		    $(this).filter('.dropzone').css({ borderColor: '#aaa' });
-		},
-		out: function() {
-		    $(this).filter('dl').css({ backgroundColor: '' });
-		    $(this).filter('.dropzone').css({ borderColor: '' });
-		}
-	    });
+	    addDragDrop();
 	    bg.topGroupName = groupname;
 	    bg.makeNewGroup();
 	}
@@ -242,95 +245,10 @@ $(function(){
         }
     });
 
-    $('#sitemap ul .dropzone').droppable({
-        accept: '#sitemap ul > li',
-        tolerance: 'pointer',
-        drop: function(e, ui) {
-            var li = $(this).parent();
-            var child = !$(this).hasClass('dropzone');
-	    var droppedParent = $('#sitemap > li').index($(li).parent().parent());
-	    droppedIndex = $('#sitemap > li').eq(droppedParent).find('li').index($(this).parent());
-            if (child && li.children('ul').length == 0) {
-                li.append('<ul/>');
-            }
-            if (child) {
-                li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
-            }
-            else {
-                li.before(ui.draggable);
-            }
-	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
-            li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
-	    bg.topGroupName = $(".sm2_title:first").text();
-	    //save rearrangement
-	    if(droppedParent === parentIndex){
-		bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,TAB_TAB);	    
-	    }else{
-		bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,droppedParent,TAB_TAB_DIFFGROUP);	    
-	    }
-            sitemapHistory.commit();
-        },
-        over: function() {
-            $(this).filter('dl').css({ backgroundColor: '#ccc' });
-            $(this).filter('.dropzone').css({ borderColor: '#aaa' });
-        },
-        out: function() {
-            $(this).filter('dl').css({ backgroundColor: '' });
-            $(this).filter('.dropzone').css({ borderColor: '' });
-        }
-    });
-
-    $('#sitemap > li > dl').droppable({
-        accept: '#sitemap  ul > li, #sitemap > ul',
-        tolerance: 'pointer',
-        drop: function(e, ui) {
-            var li = $(this).parent();
-            var child = !$(this).hasClass('dropzone');
-	    droppedIndex = $('#sitemap > li').index($(this).parent());
-            if (child && li.children('ul').length == 0) {
-                li.append('<ul/>');
-            }
-            if (child) {
-                li.addClass('sm2_liOpen').removeClass('sm2_liClosed').children('ul').append(ui.draggable);
-            }
-            else {
-                li.before(ui.draggable);
-            }
-	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
-            li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
-	    bg.topGroupName = $(".sm2_title:first").text();
-	    //save rearrangement
-	    bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,TAB_GROUP);	    
-            sitemapHistory.commit();
-        },
-        over: function() {
-            $(this).filter('dl').css({ backgroundColor: '#ccc' });
-            $(this).filter('.dropzone').css({ borderColor: '#aaa' });
-        },
-        out: function() {
-            $(this).filter('dl').css({ backgroundColor: '' });
-            $(this).filter('.dropzone').css({ borderColor: '' });
-        }
-    });
-
-
-    $('#sitemap li').draggable({
-        handle: ' > dl',
-        opacity: .8,
-        addClasses: false,
-        helper: 'clone',
-        zIndex: 100,
-        start: function(e, ui) {
-            sitemapHistory.saveState(this);
-	    if($(this).hasClass('child_tag')){
-	        parentIndex = $('#sitemap > li').index($(this).parent().parent());
-		draggedIndex = $('#sitemap > li').eq(parentIndex).find('li').index($(this));
-	    }else{
-		parentIndex = -1;
-		draggedIndex = $('#sitemap > li').index($(this));
-	    }
-        }
-    });
+    /////////////////////////
+    //validate drag and drop function
+    ////////////////////////
+    addDragDrop();
 
     $('.sitemap_undo').click(sitemapHistory.restoreState);
     $(document).bind('keypress', function(e) {
