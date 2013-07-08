@@ -1,0 +1,89 @@
+<style>
+<!--
+#jquery-ui-draggable-connectToSortable ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 5px;
+    margin-bottom: 10px;
+}
+#jquery-ui-draggable-connectToSortable li {
+    margin: 5px;
+    padding: 5px;
+    width: 200px;
+}
+#groups {
+    width: 222px;
+    padding: 5px 0;
+    border: 1px dashed gray;
+    border-radius: 10px;
+}
+
+
+
+/*  Typography
+--------------------------------------------------------------------------------------*/
+
+p {margin-bottom: 1em;}
+#footer p {margin: 0;}
+a {color:#0049ac; text-decoration: none; border-bottom: 1px solid #c2c7c8; }
+a.buttonclick {border-bottom: none;}
+th a {color: #ffffff; border-bottom: none;}
+a:hover {color: #000; border-color: #9fa5a6;}
+#nav a {border-bottom: none;}
+a:visited {}
+.intro {float: left; position: relative; width: 71.5em; padding: 1em 1em 0 1em; background: #eee; margin-bottom: 1.3em; color: #333;}
+.intro .introclose {float: right; position: relative; top: -3px; display: block; width: 19px; height: 19px; text-indent: -5000px; overflow: hidden; background: url(../img/introexpand.gif) top right; border: none;}
+.intro .introclose:hover {background-position: bottom right;}
+.intro .introexpand {float: right; position: relative; top: -3px; display: block; width: 19px; height: 19px; text-indent: -5000px; overflow: hidden; background: url(../img/introexpand.gif) top left; border: none;}
+.intro .introexpand:hover {background-position: bottom left;}
+.introclose span, .introexpand span {display: none;}
+.intro .introclose:focus, .intro .introexpand:focus {outline: none;}
+.intro {float: left; width: 71.5em; padding: 1em 1em 0 1em; background: #eee; margin-bottom: 1.3em; color: #333;}
+.formpair2 dt .intro {position: relative; top: 1.3em; margin: 0;}
+.imgLeft {margin: 0 0.8em 0.8em 0; border: 1px solid #ddd; padding: 2px; border-right-color: #bbb; border-bottom-color: #bbb; background: #f6f6ec;}
+.imgLeftWrap {float: left; margin: 0 0.8em 0.8em 0; border: 1px solid #ddd; padding: 2px; border-right-color: #bbb; border-bottom-color: #bbb; background: #f6f6ec;}
+.imgRightWrap {float: right; margin: 0 0 0.8em 0.8em; border: 1px solid #ddd; padding: 2px; border-right-color: #bbb; border-bottom-color: #bbb; background: #f6f6ec;}
+.imgLeft img, .imgLeftWrap img, .imgRightWrap img {padding: 0; margin: 0;}
+.imgLeft p, .imgLeftWrap p, .imgRightWrap p {padding: 0.5em; margin-bottom: 0; color: #777; font-size: 0.95em;}
+
+
+
+#sitemap, #dragHelper {display: block; margin: 0; list-style: none; width: 300px}
+#dragHelper { background: #eee;}
+#sitemap ul, #dragHelper ul {font-size: 0.7em; list-style: none;}
+#sitemap li, #dragHelper li {display: block; width: 100%; display: block; clear: both; }
+#sitemap dl, #dragHelper div {position: relative; display: block; height: 19px; border-top: 1px solid #eee; padding-top: 1px; background:#fff;}
+#sitemap dt, #dragHelper dt {float: left; font-weight: bold; font-size: 1.1em; line-height: 1em; margin-left: 26px; padding: 1px;}
+#sitemap dd, #dragHelper dd {float: left;}
+/*#sitemap .sm2_actions, #dragHelper .sm2_actions {display: none; padding: 3px 2px 0 5px;}*/
+#sitemap .sm2_status, #dragHelper .sm2_status {position: absolute; top: 3px; right: 0;}
+
+#sitemap dl:hover dd, #sitemap dd:hover {display: block;}
+#sitemap dl dd, #sitemap dd {display: block;}
+#sitemap dd strong, #dragHelper dd strong {display: none;}
+#sitemap a, #dragHelper a {border: none;}
+#sitemap .sm2_expander, #dragHelper .sm2_expander {position: absolute; left: 0; top: 4px;}
+
+#sitemap .sm2_liOpen, #dragHelper .sm2_liOpen {background: url(../img/sm2_li.gif) left repeat-y;}
+#sitemap .sm2_liOpen > dl > .sm2_expander, #dragHelper .sm2_liOpen > dl > .sm2_expander {display: block; width: 15px; height: 1em; background: url(../img/excol_open.gif) 50% 50% no-repeat;}
+#sitemap .sm2_liClosed > dl > .sm2_expander, #dragHelper .sm2_liClosed > dl > .sm2_expander {display: block; width: 15px; height: 1em; background: url(../img/excol_closed.gif) 50% 50% no-repeat;}
+#sitemap .sm2_liClosed ul, #dragHelper .sm2_liClosed ul {display: none;}
+#sitemap .stored {position: absolute; left: 10px; top: 4px; display: block; width: 15px; height: 1em; background: url(../img/arrow_right.gif) 50% 50% no-repeat;}
+#sitemap .released {position: absolute; left: 10px; top: 4px; display: block; width: 15px; height: 1em; background: url(../img/arrow_left.gif) 50% 50% no-repeat;}
+
+.sm2_delete, .sm2_release, .sm2_workFlow {display: block; float: left; width: 16px; height: 16px; text-indent: -5000px; margin: 0 1px 0 0; background: url(../img/sm2_move.png) top left no-repeat;}
+.sm2_actions * {cursor: pointer;}
+.sm2_pub, .sm2_workFlow {float: right; margin: 0 1px 0 0;}
+.sm2_move {background-image: url(../img/sm2_move.png);}
+.sm2_delete {background-image: url(../img/sm2_delete.png);}
+.sm2_addChild {background-image: url(../img/sm2_addChild.png);}
+.sm2_pub, .sm2_release {background-image: url(../img/sm2_unpub.png);}
+.sm2_workFlow {background-image: none;}
+
+#sortHelper {height: 1px !important; background: #000; margin: 0 !important; padding: 0; position: relative; z-index: 100;}
+#sortHelper + li {margin-top: 0;}
+
+
+#sitemap .dropzone { height:6px; background-color:#fff; border-bottom:4px solid #fff; }
+-->
+</style>

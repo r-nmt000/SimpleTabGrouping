@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+
+  "name": "SimpleTabGrouping",
+  "description": "SimpleTabGrouping",
+  "version": "1.0",
+
+  "permissions": [
+    "tabs", "http://*/*",  "https://secure.flickr.com/"
+  ],
+  "background":{
+	"scripts":["background.js"]
+  },
+  "commands": {
+    "shortcut": {
+      "suggested_key": { "default": "Alt+W" },
+      "description": "close and store a tab"
+    }
+  },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+}
+
