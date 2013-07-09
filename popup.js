@@ -216,7 +216,7 @@ $(function() {
 	    bg.topGroupName = $('li:first').contents().not($('button')).text();
 	}
     });
-    $('#sitemap li').prepend('<div class='dropzone'></div>');
+    $('#sitemap li').prepend('<div class="dropzone"></div>');
 
     /////////////////////////
     //validate drag and drop function
