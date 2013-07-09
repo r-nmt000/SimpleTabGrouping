@@ -1,5 +1,5 @@
 var bg = chrome.extension.getBackgroundPage();
-var droppedIndex,draggedIndex,parentIndex;
+var droppedIndex, draggedIndex, parentIndex;
 var GROUP_GROUP = 0, TAB_TAB = 1, TAB_GROUP = 2, TAB_TAB_DIFFGROUP = 3;
 
 
@@ -21,18 +21,17 @@ var sitemapHistory = {
         if (h == null) return;
         if (h.itemAfter.length > 0) {
             h.itemAfter.after(h.item);
-        }
-        else {
+        } else {
             h.itemParent.prepend(h.item);
         }
 	//checks the classes on the lists
 	$('#sitemap li.sm2_liOpen').not(':has(li)').removeClass('sm2_liOpen');
 	$('#sitemap li:has(ul li):not(.sm2_liClosed)').addClass('sm2_liOpen');
     }
-}
+};
 
 //validate drag and drop function
-function addDragDrop(){
+function addDragDrop() {
     //reset draggable and droppable
     $('#sitemap li').draggable({
 	handle: ' > dl',
@@ -42,10 +41,10 @@ function addDragDrop(){
 	zIndex: 100,
 	start: function(e, ui) {
 	    sitemapHistory.saveState(this);
-	    if ($(this).hasClass('child_tag')){
+	    if ($(this).hasClass('child_tag')) {
 		parentIndex = $('#sitemap > li').index($(this).parent().parent());
 		draggedIndex = $('#sitemap > li').eq(parentIndex).find('li').index($(this));
-	    }else{
+	    } else {
 		parentIndex = -1;
 		draggedIndex = $('#sitemap > li').index($(this));
 	    }
@@ -68,10 +67,10 @@ function addDragDrop(){
 		li.before(ui.draggable);
 	    }
 	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
-	    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
-	    bg.topGroupName = $(".sm2_title:first").text();
+	    li.find('dl, .dropzone').css({ backgroundColor: '', borderColor: '' });
+	    bg.topGroupName = $('.sm2_title:first').text();
 	    //save arrangement
-	    bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,GROUP_GROUP);
+	    bg.rearrangeGroups(draggedIndex, droppedIndex, parentIndex, -1, GROUP_GROUP);
 	    sitemapHistory.commit();
 	},
 	over: function() {
@@ -101,13 +100,13 @@ function addDragDrop(){
 		li.before(ui.draggable);
 	    }
 	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
-	    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
-	    bg.topGroupName = $(".sm2_title:first").text();
+	    li.find('dl, .dropzone').css({ backgroundColor: '', borderColor: '' });
+	    bg.topGroupName = $('.sm2_title:first').text();
 	    //save arrangement
-	    if (droppedParent === parentIndex){
-		bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,TAB_TAB);
-	    }else{
-		bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,droppedParent,TAB_TAB_DIFFGROUP);
+	    if (droppedParent === parentIndex) {
+		bg.rearrangeGroups(draggedIndex, droppedIndex, parentIndex, -1, TAB_TAB);
+	    } else {
+		bg.rearrangeGroups(draggedIndex, droppedIndex, parentIndex, droppedParent, TAB_TAB_DIFFGROUP);
 	    }
 	    sitemapHistory.commit();
 	},
@@ -137,10 +136,10 @@ function addDragDrop(){
 		li.before(ui.draggable);
 	    }
 	    $('#sitemap li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
-	    li.find('dl,.dropzone').css({ backgroundColor: '', borderColor: '' });
-	    bg.topGroupName = $(".sm2_title:first").text();
+	    li.find('dl, .dropzone').css({ backgroundColor: '', borderColor: '' });
+	    bg.topGroupName = $('.sm2_title:first').text();
 	    //save arrangement
-	    bg.rearrangeGroups(draggedIndex,droppedIndex,parentIndex,-1,TAB_GROUP);
+	    bg.rearrangeGroups(draggedIndex, droppedIndex, parentIndex, -1, TAB_GROUP);
 	    sitemapHistory.commit();
 	},
 	over: function() {
@@ -154,44 +153,44 @@ function addDragDrop(){
     });
 }
 function addTab(title) {
-    $("#sitemap > li:first ul").append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><!--<a href="#"class="sm2_release">&nbsp;</a>--><dt><a class="sm2_title" href="#">'+title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+    $('#sitemap > li:first ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><!--<a href="#"class="sm2_release">&nbsp;</a>--><dt><a class="sm2_title" href="#">' + title + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
 }
-function addGroup(){
-	var groupname = $("#groupname").val();
-	if (groupname){
+function addGroup() {
+	var groupname = $('#groupname').val();
+	if (groupname) {
 	    //add new group at top
-	    $("#sitemap").prepend('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
-	    $("#groupname").val("");
+	    $('#sitemap').prepend('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">' + groupname + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+	    $('#groupname').val('');
 	    addDragDrop();
 	    bg.topGroupName = groupname;
 	    bg.makeNewGroup();
 	}
 }
 
-//set saved groups in HTML 
-function setGroups(){
+//set saved groups in HTML
+function setGroups() {
     //put checkbox
-    if (bg.toNewWindow){
+    if (bg.toNewWindow) {
 	$('#new').after('<br><input type="checkbox" id="destination" checked="checked" value="value">open selected group in new window');
-    }else{
+    } else {
 	$('#new').after('<br><input type="checkbox" id="destination" value="value">open selected group in new window');
     }
     //load groups from localStorage
-    for (var i = 0; i < bg.groupList.length; i++){
+    for (var i = 0; i < bg.groupList.length; i++) {
 	var groupname = bg.groupList[i].groupname;
-	if (bg.groupList[i].stored){
-	    $('#sitemap').append('<li class="sm2_liClosed"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
-	}else{
-	    $('#sitemap').append('<li class="sm2_liClosed"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="released">&nbsp;</a><dt><a class="sm2_title" href="#">'+groupname+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+	if (bg.groupList[i].stored) {
+	    $('#sitemap').append('<li class="sm2_liClosed"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">' + groupname + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+	} else {
+	    $('#sitemap').append('<li class="sm2_liClosed"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="released">&nbsp;</a><dt><a class="sm2_title" href="#">' + groupname + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
 	}
-	if (bg.groupList[i].length != 0){
+	if (bg.groupList[i].length != 0) {
 	    $('#sitemap > li:last').append('<ul></ul>');
-	    for (var j = 0; j < bg.groupList[i].myTabs.length; j++){
-		if (bg.groupList[i].myTabs[j]){
-		    if (bg.groupList[i].myTabs[j].stored){
-		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">'+bg.groupList[i].myTabs[j].title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
-		    }else{
-		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="released">&nbsp;</a><dt><a class="sm2_title" href="#">'+bg.groupList[i].myTabs[j].title+'</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');		    
+	    for (var j = 0; j < bg.groupList[i].myTabs.length; j++) {
+		if (bg.groupList[i].myTabs[j]) {
+		    if (bg.groupList[i].myTabs[j].stored) {
+		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+		    } else {
+		    $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="released">&nbsp;</a><dt><a class="sm2_title" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
 		    }
 		}
 	    }
@@ -199,25 +198,25 @@ function setGroups(){
 	}
     }
 }
-$(function(){
+$(function() {
     //load all tabs in a window to background's allTabs.
     bg.updateAllTabs();
     //set saved groups in HTML
     setGroups();
 
     //validate events
-    $("#new:input").click(function(){addGroup()});
-    $('#groupname').keypress(function(event){if (event.which === 13){addGroup()}});
-    $('#groups').sortable( {
+    $('#new:input').click(function() {addGroup()});
+    $('#groupname').keypress(function(event) {if (event.which === 13) {addGroup()}});
+    $('#groups').sortable({
         revert: true,
 	scroll: false,
 	axis: 'y',
-	update: function( event, ui ) {
-	    var temp = "";
-	    bg.topGroupName = $("li:first").contents().not($("button")).text();
-	},
-    } );
-    $('#sitemap li').prepend('<div class="dropzone"></div>');
+	update: function(event, ui ) {
+	    var temp = '';
+	    bg.topGroupName = $('li:first').contents().not($('button')).text();
+	}
+    });
+    $('#sitemap li').prepend('<div class='dropzone'></div>');
 
     /////////////////////////
     //validate drag and drop function
@@ -235,52 +234,52 @@ $(function(){
     });
 
     //when a delete button is clicked
-    $('#sitemap').on('click', '.sm2_delete',function(){
+    $('#sitemap').on('click', '.sm2_delete', function() {
 	//tab or group
 	var isTab = $(this).parent().parent().parent('.child_tag');
 	//if it is a group
-	if ((Object.keys(isTab).length === 3)){
+	if ((Object.keys(isTab).length === 3)) {
 	    //delete selected group from groupList
 	    var index = $('#sitemap > li').index($(this).parent().parent().parent());
 	    bg.deleteGroup(index);
 	    $(this).parent().parent().parent().remove();
 	//if it is a tab
-	}else{
+	} else {
 	    var groupIndex = $('#sitemap > li').index($(this).parent().parent().parent().parent().parent());
 	    var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent());
 	    bg.groupList[groupIndex].deleteTab(tabIndex);
 	    $(this).parent().parent().parent().remove();
 	}
     });
-    $('p').on('click', '#destination',function(){
-	if ($('#destination').is(":checked")){
+    $('p').on('click', '#destination', function() {
+	if ($('#destination').is(':checked')) {
 	    bg.toNewWindow = true;
-	}else{
+	} else {
 	    bg.toNewWindow = false;
 	}
     });
 
     //when a group name is clicked, release all tabs in the group
-    $('#sitemap').on('click', 'dt',function(){
+    $('#sitemap').on('click', 'dt', function() {
 	var isTab = $(this).parent().parent('.child_tag');
 	//if it is a group
-	if (Object.keys(isTab).length === 3){
+	if (Object.keys(isTab).length === 3) {
 	    //check released or stored group
 	    var isStored = $(this).prev('.stored');
 	    var index = $('#sitemap > li').index($(this).parent().parent());
 	    var selectedGroup = bg.groupList[index];
 	    //a group is stored
-	    if (!(Object.keys(isStored).length === 3)){	       	       
-		//select where tabs release       		
-		if ($('#destination').is(":checked")){
+	    if (!(Object.keys(isStored).length === 3)) {
+		//select where tabs release
+		if ($('#destination').is(':checked')) {
 		    bg.toNewWindow = true;
 		}
 		//release a group
-		selectedGroup.release();	       
+		selectedGroup.release();
 		//toggle children's released and stored
 		$(this).parent().next().children().find('.stored').toggleClass('stored').toggleClass('released');
 	    //a group is released
-	    }else{
+	    } else {
 		//close tabs in the group
 		selectedGroup.store();
 		//chrome.tabs.onRemoved.addListener() doesn't work well
@@ -292,17 +291,17 @@ $(function(){
 	    //switch released and stored
 	    $(this).prev().toggleClass('stored').toggleClass('released');
 	//if it is a tab
-	}else{
+	} else {
 	    //check released or stored tab
 	    var isStored = $(this).prev('.stored');
 	    var groupIndex = $('#sitemap > li').index($(this).parent().parent().parent().parent());
 	    var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent());
 	    var selectedTab = bg.groupList[groupIndex].myTabs[tabIndex];
 	    //stored
-	    if (!(Object.keys(isStored).length === 3)){
+	    if (!(Object.keys(isStored).length === 3)) {
 		selectedTab.release(groupIndex);
 	    //released
-	    }else{
+	    } else {
 		selectedTab.store(groupIndex);
 	    }
 	    //toggle released and stored
