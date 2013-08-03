@@ -231,6 +231,14 @@ function assignEventHandlers() {
 	allTabs[tab.id] = new tabData(tab);
     });
     chrome.tabs.onRemoved.addListener(function(tabId) {
+        for(var i in groupList){
+            for(var j in groupList[i].myTabs){
+                if(groupList[i].myTabs[j].url === allTabs[tabId].url){
+                    groupList[i].myTabs[j].stored = true;
+                    break;
+                }
+            }
+        }
 	delete allTabs[tabId];
     });
     chrome.commands.onCommand.addListener(function(command) {
@@ -290,5 +298,3 @@ function rearrangeGroups(draggedIndex, droppedIndex, parentIndex, droppedParent,
 
 init();
 chrome.browserAction.setBadgeText({'text': '100'});
-
-
