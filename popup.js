@@ -309,5 +309,3 @@ selectedTab.store(groupIndex);
     });
 
 });
-
-

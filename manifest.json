@@ -1,25 +1,31 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 2,
 
-  "name": "SimpleTabGrouping",
-  "description": "SimpleTabGrouping",
-  "version": "1.0",
+    "name": "SimpleTabGrouping",
+    "description": "SimpleTabGrouping",
+    "version": "1.0",
 
-  "permissions": [
-    "tabs", "http://*/*",  "https://secure.flickr.com/"
-  ],
-  "background":{
+    "permissions": [
+        "tabs", "http://*/*"
+    ],
+    "background":{
 	"scripts":["background.js"]
-  },
-  "commands": {
-    "shortcut": {
-      "suggested_key": { "default": "Alt+W" },
-      "description": "close and store a tab"
-    }
-  },
-  "browser_action": {
-    "default_icon": "img/icon.png",
-    "default_popup": "popup.html"
-  }
-}
+    },
+    "commands": {
+        "shortcut": {
+            "suggested_key": { "default": "Alt+W" },
+            "description": "close and store a tab"
+        }
+    },
+    "content_scripts":[
+    {
+        "matches": ["http://www.m-bsys.com/code/*"],
+        "js": ["test.user.js"]
 
+    }
+    ],
+    "browser_action": {
+        "default_icon": "img/icon.png",
+        "default_popup": "popup.html"
+    }
+}

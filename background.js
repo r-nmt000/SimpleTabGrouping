@@ -194,8 +194,17 @@ function init() {
 
 //called when shortcut key is pressed
 function closeTab(tab) {
+    var found = false;
     if (groupList.length > 0) {
-	groupList[0].add(tab.id);
+        for(var i = 0; i < groupList[0].myTabs.length; i++){
+            if(tab.url === groupList[0].myTabs[i].url){
+                found = true;
+                break;
+            }
+        }
+        if(found === false){
+            groupList[0].add(tab.id);
+        }
     }
 //    allTabs.splice(tab.id, 1);
       chrome.tabs.remove(tab.id);
