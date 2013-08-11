@@ -12,3 +12,7 @@ HowToUse
 4. repeat 1 to 3 and have a wonderful chrome life!
 
 (*)closed tabs are saved in the group on top of the list. you can drag and drop groups and rearrange them.
+
+Lisence
+=======
+This program is under MIT Lisence.

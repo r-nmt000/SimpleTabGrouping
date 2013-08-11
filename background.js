@@ -22,10 +22,22 @@ tabData.prototype = {
     release: function(parent) {
         this.stored = false;
 	try {
-	    //release tab
-	    chrome.tabs.create({windowId: groupList[parent].winId, url: this.url});
-	    //toggle stored and released
-	    localStorage.groupList = JSON.stringify(groupList);
+            if (toNewWindow) {
+	        var winID;
+	        chrome.windows.create({url: this.url}, function(win) {
+	            winID = win.id;
+                });
+	        var winID2 = winID;
+		//always register new window id
+		//forget about old one
+		groupList[parent].winId = winID2;
+	    }
+            else{
+	        //release tab
+	        chrome.tabs.create({windowId: groupList[parent].winId, url: this.url});
+	        //toggle stored and released
+	        localStorage.groupList = JSON.stringify(groupList);
+            }
 	} catch (e) {
 	    console.error('tabData.release', e);
 	}
