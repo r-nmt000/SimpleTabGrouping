@@ -170,11 +170,11 @@ function addGroup() {
 //set saved groups in HTML
 function setGroups() {
     //put checkbox
-    if (bg.toNewWindow) {
-        $('#new').after('<br><input type="checkbox" id="destination" checked="checked" value="value">open selected group in new window');
-    } else {
-        $('#new').after('<br><input type="checkbox" id="destination" value="value">open selected group in new window');
-    }
+    //if (bg.toNewWindow) {
+    //     $('#new').after('<br><input type="checkbox" id="destination" checked="checked" value="value">open selected group in new window');
+    // } else {
+    //     $('#new').after('<br><input type="checkbox" id="destination" value="value">open selected group in new window');
+    // }
     //load groups from localStorage
     for (var i = 0; i < bg.groupList.length; i++) {
         var groupname = bg.groupList[i].groupname;
@@ -251,7 +251,7 @@ $(function() {
             $(this).parent().parent().parent().remove();
         }
     });
-    $('p').on('click', '#destination', function() {
+    $('p').on('click', '#destination', function(event) {
         if ($('#destination').is(':checked')) {
             bg.toNewWindow = true;
         } else {
@@ -260,7 +260,7 @@ $(function() {
     });
 
     //when a group name is clicked, release all tabs in the group
-    $('#sitemap').on('click', 'dt', function() {
+    $('#sitemap').on('click', 'dt', function(event) {
         var isTab = $(this).parent().parent('.child_tag');
         //if it is a group
         if (Object.keys(isTab).length === 3) {
@@ -271,8 +271,11 @@ $(function() {
             //a group is stored
             if (!(Object.keys(isStored).length === 3)) {
                 //select where tabs release
-                if ($('#destination').is(':checked')) {
+                if (event.metaKey) {
                     bg.toNewWindow = true;
+                }
+                else {
+                    bg.toNewWindow = false;
                 }
                 //release a group
                 selectedGroup.release();
@@ -297,6 +300,12 @@ $(function() {
             var groupIndex = $('#sitemap > li').index($(this).parent().parent().parent().parent());
             var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent());
             var selectedTab = bg.groupList[groupIndex].myTabs[tabIndex];
+            if (event.metaKey) {
+                bg.toNewWindow = true;
+            }
+            else {
+                bg.toNewWindow = false;
+            }
             //stored
             if (!(Object.keys(isStored).length === 3)) {
                 selectedTab.release(groupIndex);

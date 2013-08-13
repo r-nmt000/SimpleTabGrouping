@@ -289,23 +289,24 @@ function deleteGroup(index) {
 }
 function rearrangeGroups(draggedIndex, droppedIndex, parentIndex, droppedParent, pattern) {
     try {
+        var temp;
 	switch (pattern) {
 	case 0: //group - group
 	    if (draggedIndex < droppedIndex) droppedIndex--;
-	    var temp = groupList.splice(draggedIndex, 1);
+	    temp = groupList.splice(draggedIndex, 1);
 	    groupList.splice(droppedIndex, 0, temp[0]);
 	    break;
 	case 1: //tab - tab
 	    if (draggedIndex < droppedIndex) droppedIndex--;
-	    var temp = groupList[parentIndex].myTabs.splice(draggedIndex, 1);
+	    temp = groupList[parentIndex].myTabs.splice(draggedIndex, 1);
 	    groupList[parentIndex].myTabs.splice(droppedIndex, 0, temp[0]);
 	    break;
 	case 2: //tab - group
-	    var temp = groupList[parentIndex].myTabs.splice(draggedIndex, 1);
+	    temp = groupList[parentIndex].myTabs.splice(draggedIndex, 1);
 	    groupList[droppedIndex].myTabs.push(temp[0]);
 	    break;
 	case 3: //tab - tab in different groups
-	    var temp = groupList[parentIndex].myTabs.splice(draggedIndex, 1);
+	    temp = groupList[parentIndex].myTabs.splice(draggedIndex, 1);
 	    groupList[droppedParent].myTabs.splice(droppedIndex, 0, temp[0]);
 	    break;
 	default: break;

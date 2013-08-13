@@ -17,13 +17,6 @@
             "description": "close and store a tab"
         }
     },
-    "content_scripts":[
-    {
-        "matches": ["http://www.m-bsys.com/code/*"],
-        "js": ["test.user.js"]
-
-    }
-    ],
     "browser_action": {
         "default_icon": "img/icon.png",
         "default_popup": "popup.html"
