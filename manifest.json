@@ -13,7 +13,7 @@
     },
     "commands": {
         "shortcut": {
-            "suggested_key": { "default": "Alt+W" },
+            "suggested_key": { "default": "Alt+T" },
             "description": "close and store a tab"
         }
     },

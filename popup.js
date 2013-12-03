@@ -1,5 +1,5 @@
-var bg = chrome.extension.getBackgroundPage();
 var droppedIndex, draggedIndex, parentIndex;
+var bg = chrome.extension.getBackgroundPage();
 var GROUP_GROUP = 0, TAB_TAB = 1, TAB_GROUP = 2, TAB_TAB_DIFFGROUP = 3;
 
 
@@ -169,12 +169,6 @@ function addGroup() {
 
 //set saved groups in HTML
 function setGroups() {
-    //put checkbox
-    //if (bg.toNewWindow) {
-    //     $('#new').after('<br><input type="checkbox" id="destination" checked="checked" value="value">open selected group in new window');
-    // } else {
-    //     $('#new').after('<br><input type="checkbox" id="destination" value="value">open selected group in new window');
-    // }
     //load groups from localStorage
     for (var i = 0; i < bg.groupList.length; i++) {
         var groupname = bg.groupList[i].groupname;
@@ -246,7 +240,7 @@ $(function() {
             //if it is a tab
         } else {
             var groupIndex = $('#sitemap > li').index($(this).parent().parent().parent().parent().parent());
-            var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent());
+            var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent().parent());
             bg.groupList[groupIndex].deleteTab(tabIndex);
             $(this).parent().parent().parent().remove();
         }

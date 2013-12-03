@@ -94,7 +94,7 @@ tabGroup.prototype = {
 			if (first) {
 			    var winID;
 			    chrome.windows.create({url: this.myTabs[i].url}, function(win) {
-				winID = win.id;
+			winID = win.id;
 			    });
 			    var winID2 = winID;
 			    //always register new window id
