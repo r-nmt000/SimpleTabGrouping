@@ -4,6 +4,12 @@
     <title>Simple Tabs Grouping</title>
     <link rel="stylesheet" href="./jquery-ui-1.10.3.custom/css/smoothness/jquery-ui-1.10.3.custom.min.css">
     <link rel="stylesheet" href="./popup.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="./jquery-1.10.1.min.js"></script>
     <script src="./jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
 <!--
@@ -12,12 +18,20 @@
     <script src="./popup.js"></script>
   </head>
   <body>
-    <p>
-      Group Name<input type="text" size="20" maxlength="15" id="groupname"><input type="submit" value="new" id="new">
-      <br>click group name holding cmd to open tabs in another window
-    </p>
-    <div id="groups-tree">
-      <ul id="sitemap">
+    <div class="form-group form-inline">
+      <div class="row">
+        <div class="col-xs-9">
+          <input type="text" placeholder="Group Name" class="form-control"  maxlength="15" id="groupname">
+        </div>
+        <!-- <div class="col&#45;xs&#45;3"> -->
+          <button type="button" class="btn btn-default" type="submit">Create</button>
+        <!-- </div> -->
+      </div>
+      <!-- <div> -->
+    <!-- <input type="text" placeholder="Group Name"  maxlength="15" id="groupname"><button type="button" type="submit">Create</button> -->
+    <!-- </div> -->
+    <div id="groups-tree" class="row">
+      <ul id="sitemap" class="list-group">
           </ul>
         </li>
       </ul>
