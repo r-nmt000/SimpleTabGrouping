@@ -171,12 +171,12 @@ tabGroup.prototype = {
 		} else {
 		    multiNum += 1;
 		}
-		if ((multiNum * 2 + singleNum) > 20) {
+		if ((multiNum * 2 + singleNum) > 25) {
 		    break;
 		}
 	    }
 	    //make title short if it's too long
-	    if ((multiNum * 2 + singleNum) > 20) {
+	    if ((multiNum * 2 + singleNum) > 25) {
 		allTabs[tabId].title = allTabs[tabId].title.substring(0, (multiNum + singleNum)) + ' ...';
 	    }
 	} catch (e) {

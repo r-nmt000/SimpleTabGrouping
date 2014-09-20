@@ -153,13 +153,13 @@ function addDragDrop() {
     });
 }
 function addTab(title) {
-    $('#sitemap > li:first ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><!--<a href="#"class="sm2_release">&nbsp;</a>--><dt><a class="sm2_title" href="#">' + title + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+    $('#sitemap > li:first ul').append('<li class="child_tag col-xs-12"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><!--<a href="#"class="sm2_release col-xs-1">&nbsp;</a>--><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + title + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
 }
 function addGroup() {
     var groupname = $('#groupname').val();
     if (groupname) {
         //add new group at top
-        $('#sitemap').prepend('<li class="sm2_liClosed"><div class="dropzone"></div><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">' + groupname + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+        $('#sitemap').prepend('<li class="sm2_liClosed col-xs-12"><div class="dropzone"></div><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
         $('#groupname').val('');
         addDragDrop();
         bg.topGroupName = groupname;
@@ -173,18 +173,18 @@ function setGroups() {
     for (var i = 0; i < bg.groupList.length; i++) {
         var groupname = bg.groupList[i].groupname;
         if (bg.groupList[i].stored) {
-            $('#sitemap').append('<li class="sm2_liClosed"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">' + groupname + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+            $('#sitemap').append('<li class="sm2_liClosed col-xs-12"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
         } else {
-            $('#sitemap').append('<li class="sm2_liClosed"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="released">&nbsp;</a><dt><a class="sm2_title" href="#">' + groupname + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+            $('#sitemap').append('<li class="sm2_liClosed col-xs-12"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-2">&nbsp;</a><a href="#"class="released col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
         }
         if (bg.groupList[i].length != 0) {
-            $('#sitemap > li:last').append('<ul></ul>');
+            $('#sitemap > li:last').append('<ul class="list-group"></ul>');
             for (var j = 0; j < bg.groupList[i].myTabs.length; j++) {
                 if (bg.groupList[i].myTabs[j]) {
                     if (bg.groupList[i].myTabs[j].stored) {
-                        $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="stored">&nbsp;</a><dt><a class="sm2_title" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+                        $('#sitemap > li:Last ul').append('<li class="child_tag col-xs-12"><dl class="sm2_s_published"><div class="row"><p class="col-xs-2"></p><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-8"><a class="sm2_title list-group-item" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
                     } else {
-                        $('#sitemap > li:Last ul').append('<li class="child_tag"><dl class="sm2_s_published"><a href="#"class="sm2_expander">&nbsp;</a><a href="#"class="released">&nbsp;</a><dt><a class="sm2_title" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></dl></li>');
+                        $('#sitemap > li:Last ul').append('<li class="child_tag col-xs-12"><dl class="sm2_s_published"><div class="row"><p class="col-xs-2"></p><a href="#"class="released col-xs-1">&nbsp;</a><dt class="col-xs-8"><a class="sm2_title list-group-item" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
                     }
                 }
             }
@@ -222,8 +222,10 @@ $(function() {
         if (e.ctrlKey && (e.which == 122 || e.which == 26))
             sitemapHistory.restoreState();
     });
-    $('#sitemap').on('click', 'li > .sm2_s_published > .sm2_expander', function() {
-        $(this).parent().parent().toggleClass('sm2_liOpen').toggleClass('sm2_liClosed');
+    // $('#sitemap').on('click', 'li > .sm2_s_published > .sm2_expander', function() {
+    $('#sitemap').on('click', '.sm2_expander', function() {
+        console.log("clicked");
+        $(this).parent().parent().parent().toggleClass('sm2_liOpen').toggleClass('sm2_liClosed');
         return false;
     });
 
