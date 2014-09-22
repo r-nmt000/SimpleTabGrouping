@@ -153,13 +153,13 @@ function addDragDrop() {
     });
 }
 function addTab(title) {
-    $('#sitemap > li:first ul').append('<li class="child_tag col-xs-12"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><!--<a href="#"class="sm2_release col-xs-1">&nbsp;</a>--><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + title + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
+    $('#sitemap > li:first ul').append('<li class="child_tag col-xs-12 group"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><!--<a href="#"class="sm2_release col-xs-1">&nbsp;</a>--><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + title + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
 }
 function addGroup() {
     var groupname = $('#groupname').val();
     if (groupname) {
         //add new group at top
-        $('#sitemap').prepend('<li class="sm2_liClosed col-xs-12"><div class="dropzone"></div><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
+        $('#sitemap').prepend('<li class="sm2_liClosed col-xs-12 group"><div class="dropzone"></div><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
         $('#groupname').val('');
         addDragDrop();
         bg.topGroupName = groupname;
@@ -173,9 +173,9 @@ function setGroups() {
     for (var i = 0; i < bg.groupList.length; i++) {
         var groupname = bg.groupList[i].groupname;
         if (bg.groupList[i].stored) {
-            $('#sitemap').append('<li class="sm2_liClosed col-xs-12"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
+            $('#sitemap').append('<li class="sm2_liClosed col-xs-12 group"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
         } else {
-            $('#sitemap').append('<li class="sm2_liClosed col-xs-12"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-2">&nbsp;</a><a href="#"class="released col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
+            $('#sitemap').append('<li class="sm2_liClosed col-xs-12 group"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-2">&nbsp;</a><a href="#"class="released col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
         }
         if (bg.groupList[i].length != 0) {
             $('#sitemap > li:last').append('<ul class="list-group"></ul>');
@@ -225,26 +225,26 @@ $(function() {
     // $('#sitemap').on('click', 'li > .sm2_s_published > .sm2_expander', function() {
     $('#sitemap').on('click', '.sm2_expander', function() {
         console.log("clicked");
-        $(this).parent().parent().parent().toggleClass('sm2_liOpen').toggleClass('sm2_liClosed');
+        $(this).parents('.group').toggleClass('sm2_liOpen').toggleClass('sm2_liClosed');
         return false;
     });
 
     //when a delete button is clicked
     $('#sitemap').on('click', '.sm2_delete', function() {
         //tab or group
-        var isTab = $(this).parent().parent().parent('.child_tag');
+        var isTab = $(this).parents('.child_tag');
         //if it is a group
         if ((Object.keys(isTab).length === 3)) {
             //delete selected group from groupList
-            var index = $('#sitemap > li').index($(this).parent().parent().parent());
+            var index = $('#sitemap > li').index($(this).parents('.group'));
             bg.deleteGroup(index);
-            $(this).parent().parent().parent().remove();
+            $(this).parents('.group').remove();
             //if it is a tab
         } else {
-            var groupIndex = $('#sitemap > li').index($(this).parent().parent().parent().parent().parent());
-            var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent().parent());
+            var groupIndex = $('#sitemap > li').index($(this).parents('.group'));
+            var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parents('.child_tag'));
             bg.groupList[groupIndex].deleteTab(tabIndex);
-            $(this).parent().parent().parent().remove();
+            $(this).parents('.').remove();
         }
     });
     $('p').on('click', '#destination', function(event) {
@@ -257,12 +257,12 @@ $(function() {
 
     //when a group name is clicked, release all tabs in the group
     $('#sitemap').on('click', 'dt', function(event) {
-        var isTab = $(this).parent().parent('.child_tag');
+        var isTab = $(this).parents('.child_tag');
         //if it is a group
         if (Object.keys(isTab).length === 3) {
             //check released or stored group
             var isStored = $(this).prev('.stored');
-            var index = $('#sitemap > li').index($(this).parent().parent());
+            var index = $('#sitemap > li').index($(this).parents('.group'));
             var selectedGroup = bg.groupList[index];
             //a group is stored
             if (!(Object.keys(isStored).length === 3)) {
@@ -276,7 +276,7 @@ $(function() {
                 //release a group
                 selectedGroup.release();
                 //toggle children's released and stored
-                $(this).parent().next().children().find('.stored').toggleClass('stored').toggleClass('released');
+                $(this).parents('.sm2_s_published').siblings('.list-group').find('.child_tag').find('.stored').toggleClass('stored').toggleClass('released');
                 //a group is released
             } else {
                 //close tabs in the group
@@ -285,16 +285,16 @@ $(function() {
                 //so refresh allTabs manually
                 bg.updateAllTabs();
                 //toggle children's released and stored
-                $(this).parent().next().children().find('.released').toggleClass('stored').toggleClass('released');
+                $(this).parents('.sm2_s_published').siblings('.list-group').find('.child_tag').find('.released').toggleClass('stored').toggleClass('released');
             }
             //switch released and stored
-            $(this).prev().toggleClass('stored').toggleClass('released');
+            $(this).siblings('a').toggleClass('stored').toggleClass('released');
         //if it is a tab
         } else {
             //check released or stored tab
             var isStored = $(this).prev('.stored');
-            var groupIndex = $('#sitemap > li').index($(this).parent().parent().parent().parent());
-            var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parent().parent());
+            var groupIndex = $('#sitemap > li').index($(this).parents('.group'));
+            var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parents('.child_tag'));
             var selectedTab = bg.groupList[groupIndex].myTabs[tabIndex];
             if (event.metaKey) {
                 bg.toNewWindow = true;
@@ -310,7 +310,7 @@ $(function() {
                 selectedTab.store(groupIndex);
             }
             //toggle released and stored
-            $(this).prev().toggleClass('stored').toggleClass('released');}
+            $(this).prev('a').toggleClass('stored').toggleClass('released');}
     });
 
 });
