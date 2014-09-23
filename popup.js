@@ -225,7 +225,7 @@ $(function() {
     // $('#sitemap').on('click', 'li > .sm2_s_published > .sm2_expander', function() {
     $('#sitemap').on('click', '.sm2_expander', function() {
         console.log("clicked");
-        $(this).parents('.group').toggleClass('sm2_liOpen').toggleClass('sm2_liClosed');
+        $(this).parents('.group').toggleClass('sm2_liOpen sm2_liClosed');
         return false;
     });
 
@@ -247,13 +247,13 @@ $(function() {
             $(this).parents('.').remove();
         }
     });
-    $('p').on('click', '#destination', function(event) {
-        if ($('#destination').is(':checked')) {
-            bg.toNewWindow = true;
-        } else {
-            bg.toNewWindow = false;
-        }
-    });
+    // $('p').on('click', '#destination', function(event) {
+    //     if ($('#destination').is(':checked')) {
+    //         bg.toNewWindow = true;
+    //     } else {
+    //         bg.toNewWindow = false;
+    //     }
+    // });
 
     //when a group name is clicked, release all tabs in the group
     $('#sitemap').on('click', 'dt', function(event) {
@@ -276,7 +276,7 @@ $(function() {
                 //release a group
                 selectedGroup.release();
                 //toggle children's released and stored
-                $(this).parents('.sm2_s_published').siblings('.list-group').find('.child_tag').find('.stored').toggleClass('stored').toggleClass('released');
+                $(this).parents('.sm2_s_published').siblings('.list-group').find('.stored').toggleClass('stored released');
                 //a group is released
             } else {
                 //close tabs in the group
@@ -285,10 +285,10 @@ $(function() {
                 //so refresh allTabs manually
                 bg.updateAllTabs();
                 //toggle children's released and stored
-                $(this).parents('.sm2_s_published').siblings('.list-group').find('.child_tag').find('.released').toggleClass('stored').toggleClass('released');
+                $(this).parents('.sm2_s_published').siblings('.list-group').find('.released').toggleClass('stored released');
             }
             //switch released and stored
-            $(this).siblings('a').toggleClass('stored').toggleClass('released');
+            $(this).siblings('a.released, .stored').toggleClass('stored released');
         //if it is a tab
         } else {
             //check released or stored tab
@@ -310,7 +310,8 @@ $(function() {
                 selectedTab.store(groupIndex);
             }
             //toggle released and stored
-            $(this).prev('a').toggleClass('stored').toggleClass('released');}
+            $(this).prev('a').toggleClass('stored released');
+        }
     });
 
 });
