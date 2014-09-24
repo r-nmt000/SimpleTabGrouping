@@ -34,7 +34,8 @@ tabData.prototype = {
       }
       else{
         //release tab
-        chrome.tabs.create({windowId: groupList[parent].winId, url: this.url});
+        // chrome.tabs.create({windowId: groupList[parent].winId, url: this.url});
+        chrome.tabs.create({url: this.url});
         //toggle stored and released
         localStorage.groupList = JSON.stringify(groupList);
       }

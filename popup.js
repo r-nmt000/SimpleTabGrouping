@@ -175,16 +175,16 @@ function setGroups() {
         if (bg.groupList[i].stored) {
             $('#sitemap').append('<li class="sm2_liClosed col-xs-12 group"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
         } else {
-            $('#sitemap').append('<li class="sm2_liClosed col-xs-12 group"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-2">&nbsp;</a><a href="#"class="released col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
+            $('#sitemap').append('<li class="sm2_liClosed col-xs-12 group"><dl class="sm2_s_published"><div class="row"><a href="#"class="sm2_expander col-xs-1">&nbsp;</a><a href="#"class="released col-xs-1">&nbsp;</a><dt class="col-xs-9"><a class="sm2_title list-group-item" href="#">' + groupname + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong><span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
         }
         if (bg.groupList[i].length != 0) {
             $('#sitemap > li:last').append('<ul class="list-group"></ul>');
             for (var j = 0; j < bg.groupList[i].myTabs.length; j++) {
                 if (bg.groupList[i].myTabs[j]) {
                     if (bg.groupList[i].myTabs[j].stored) {
-                        $('#sitemap > li:Last ul').append('<li class="child_tag col-xs-12"><dl class="sm2_s_published"><div class="row"><p class="col-xs-2"></p><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-8"><a class="sm2_title list-group-item" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
+                        $('#sitemap > li:Last ul').append('<li class="child_tag col-xs-12"><dl class="sm2_s_published"><div class="row"><p class="col-xs-1"></p><a href="#"class="stored col-xs-1">&nbsp;</a><dt class="col-xs-8"><a class="sm2_title list-group-item" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
                     } else {
-                        $('#sitemap > li:Last ul').append('<li class="child_tag col-xs-12"><dl class="sm2_s_published"><div class="row"><p class="col-xs-2"></p><a href="#"class="released col-xs-1">&nbsp;</a><dt class="col-xs-8"><a class="sm2_title list-group-item" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
+                        $('#sitemap > li:Last ul').append('<li class="child_tag col-xs-12"><dl class="sm2_s_published"><div class="row"><p class="col-xs-1"></p><a href="#"class="released col-xs-1">&nbsp;</a><dt class="col-xs-8"><a class="sm2_title list-group-item" href="#">' + bg.groupList[i].myTabs[j].title + '</a></dt><dd class="sm2_actions col-xs-1"><strong>Actions:</strong> <span class="sm2_delete" title="Delete">Delete</span></dd></div></dl></li>');
                     }
                 }
             }
@@ -244,16 +244,9 @@ $(function() {
             var groupIndex = $('#sitemap > li').index($(this).parents('.group'));
             var tabIndex = $('#sitemap > li').eq(groupIndex).find('li').index($(this).parents('.child_tag'));
             bg.groupList[groupIndex].deleteTab(tabIndex);
-            $(this).parents('.').remove();
+            $(this).parents('.child_tag').remove();
         }
     });
-    // $('p').on('click', '#destination', function(event) {
-    //     if ($('#destination').is(':checked')) {
-    //         bg.toNewWindow = true;
-    //     } else {
-    //         bg.toNewWindow = false;
-    //     }
-    // });
 
     //when a group name is clicked, release all tabs in the group
     $('#sitemap').on('click', 'dt', function(event) {

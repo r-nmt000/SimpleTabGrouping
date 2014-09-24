@@ -1,0 +1,10 @@
+{
+  "appName":{
+    "message": "SimpleTabGrouping",
+    "description": "アプリケーション名"
+  },
+  "appDesc": {
+    "message": "ブラウザのタブをグルーピングするためのエクステンションです。",
+    "description": "アプリケーションの説明"
+  }
+}
